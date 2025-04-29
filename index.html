@@ -4,24 +4,41 @@
   <title>Redirecting to Goose...</title>
   <script>
     window.onload = function() {
-      // Get the path from URL (everything after the domain)
-      const path = window.location.pathname.substring(1);
-      // Get query parameters
-      const queryParams = new URLSearchParams(window.location.search);
-      const targetParam = queryParams.get('target');
+      // Get the full query string
+      const queryString = window.location.search;
       
-      // Use the target parameter if available, otherwise use the path
-      const redirectTarget = targetParam || path || 'your/actual/path';
-      
-      // Construct the goose URL
-      const gooseUrl = `goose:///${redirectTarget}`;
-      
-      // Update the meta refresh tag
-      document.getElementById('metaRedirect').setAttribute('content', `0; url=${gooseUrl}`);
-      
-      // Update the fallback link
-      document.getElementById('fallbackLink').setAttribute('href', gooseUrl);
-      document.getElementById('fallbackLink').textContent = `click here to open ${gooseUrl}`;
+      // Check if this is an extension request
+      if (queryString.includes('cmd=uvx')) {
+        // For extension requests, preserve all query parameters
+        const gooseUrl = `goose://extension${queryString}`;
+        
+        // Update the meta refresh tag
+        document.getElementById('metaRedirect').setAttribute('content', `0; url=${gooseUrl}`);
+        
+        // Update the fallback link
+        document.getElementById('fallbackLink').setAttribute('href', gooseUrl);
+        document.getElementById('fallbackLink').textContent = `click here to open ${gooseUrl}`;
+      } else {
+        // For other requests, use the original logic
+        // Get the path from URL (everything after the domain)
+        const path = window.location.pathname.substring(1);
+        // Get query parameters
+        const queryParams = new URLSearchParams(window.location.search);
+        const targetParam = queryParams.get('target');
+        
+        // Use the target parameter if available, otherwise use the path
+        const redirectTarget = targetParam || path || 'your/actual/path';
+        
+        // Construct the goose URL
+        const gooseUrl = `goose:///${redirectTarget}`;
+        
+        // Update the meta refresh tag
+        document.getElementById('metaRedirect').setAttribute('content', `0; url=${gooseUrl}`);
+        
+        // Update the fallback link
+        document.getElementById('fallbackLink').setAttribute('href', gooseUrl);
+        document.getElementById('fallbackLink').textContent = `click here to open ${gooseUrl}`;
+      }
     };
   </script>
   <meta id="metaRedirect" http-equiv="refresh" content="0; url=goose:///your/actual/path">
