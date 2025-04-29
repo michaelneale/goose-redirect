@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Redirecting to Goose...</title>
+  <script>
+    window.onload = function() {
+      // Get the path from URL (everything after the domain)
+      const path = window.location.pathname.substring(1);
+      // Get query parameters
+      const queryParams = new URLSearchParams(window.location.search);
+      const targetParam = queryParams.get('target');
+      
+      // Use the target parameter if available, otherwise use the path
+      const redirectTarget = targetParam || path || 'your/actual/path';
+      
+      // Construct the goose URL
+      const gooseUrl = `goose:///${redirectTarget}`;
+      
+      // Update the meta refresh tag
+      document.getElementById('metaRedirect').setAttribute('content', `0; url=${gooseUrl}`);
+      
+      // Update the fallback link
+      document.getElementById('fallbackLink').setAttribute('href', gooseUrl);
+      document.getElementById('fallbackLink').textContent = `click here to open ${gooseUrl}`;
+    };
+  </script>
+  <meta id="metaRedirect" http-equiv="refresh" content="0; url=goose:///your/actual/path">
+</head>
+<body>
+  <p>If you are not redirected, <a id="fallbackLink" href="goose:///your/actual/path">click here</a>.</p>
+</body>
+</html>
